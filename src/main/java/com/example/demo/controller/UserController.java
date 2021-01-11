@@ -95,6 +95,18 @@ public class UserController {
         return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/user/getByUsername/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDto> getUserById(@PathVariable("username") String username) {
+        System.out.println("Fetching User with username " + username);
+        User account = userService.findByUsername(username);
+        if (account == null) {
+            System.out.println("User with username " + username + " not found");
+            return new ResponseEntity<UserDto>(HttpStatus.NOT_FOUND);
+        }
+        UserDto userDto = new UserDto(account);
+        return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
+    }
+
     //Create User
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
