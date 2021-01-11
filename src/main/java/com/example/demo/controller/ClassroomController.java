@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.model.*;
 import com.example.demo.model.dto.*;
+import com.example.demo.model.request.UpdateImportantRequest;
+import com.example.demo.model.request.UpdatePointRequest;
 import com.example.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -366,13 +368,13 @@ public class ClassroomController {
     }
 
     @RequestMapping(value = "/classroom/updatePoints/{classId}", method = RequestMethod.PATCH)
-    public ResponseEntity<Double> updatePoints(@PathVariable("classId") Long classroomId, @RequestBody List<UpdatePointDto> datas) {
+    public ResponseEntity<Double> updatePoints(@PathVariable("classId") Long classroomId, @RequestBody List<UpdatePointRequest> datas) {
         Classroom classroom = service.findById(classroomId);
         if (classroom == null) {
             System.out.println("Classroom with id " + classroomId + " not found");
             return new ResponseEntity<Double>(HttpStatus.NOT_FOUND);
         }
-        for (UpdatePointDto data : datas) {
+        for (UpdatePointRequest data : datas) {
             Long studentId = data.getStudentId();
             Long rubricImportantId = data.getRubricImportantId();
             double newPoint = data.getPoint();
