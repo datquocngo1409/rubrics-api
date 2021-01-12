@@ -16,6 +16,9 @@ public class User {
 
     private String password;
 
+    @Column(unique = true)
+    private String code;
+
     private String role;
 
     private String name;
@@ -35,11 +38,12 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String role, String name) {
+    public User(String username, String password, String role, String name, String code) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.name = name;
+        this.code = code;
     }
 
     public Long getId() {
@@ -128,5 +132,13 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

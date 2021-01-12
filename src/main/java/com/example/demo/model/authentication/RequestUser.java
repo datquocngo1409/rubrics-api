@@ -5,6 +5,7 @@ public class RequestUser {
     private String password;
     private String role;
     private String name;
+    private String code;
 
     public String getUsername() {
         return username;
@@ -36,5 +37,13 @@ public class RequestUser {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }
