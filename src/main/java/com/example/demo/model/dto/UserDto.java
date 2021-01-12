@@ -15,6 +15,7 @@ public class UserDto {
     private String email;
     private String avatar;
     private String token;
+    private String code;
 
     public UserDto() {
     }
@@ -30,5 +31,6 @@ public class UserDto {
         this.email = user.getEmail();
         this.avatar = user.getAvatar();
         this.token = user.getToken();
+        this.code = user.getCode();
     }
 }
