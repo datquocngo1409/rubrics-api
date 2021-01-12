@@ -38,12 +38,11 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String role, String name, String code) {
+    public User(String username, String password, String role, String name) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.name = name;
-        this.code = code;
     }
 
     public Long getId() {
