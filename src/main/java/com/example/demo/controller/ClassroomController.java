@@ -227,7 +227,7 @@ public class ClassroomController {
                     studentTotalRubricPoints.remove(strp);
                     transcriptData.setStudentTotalRubricPoints(studentTotalRubricPoints);
                     for (StudentRubricPoint srp : strp.getStudentRubricPoint()) {
-                        studentRubricPointService.delete(srp.getId());
+//                        studentRubricPointService.delete(srp.getId());
                     }
                     transcriptDataService.save(transcriptData);
                     studentTotalRubricPointService.delete(strp.getId());
