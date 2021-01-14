@@ -471,4 +471,34 @@ public class ClassroomController {
         }
         return new ResponseEntity<RubricImportantDto>(new RubricImportantDto(rubricImportant), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/classroom/updateImportants/{classId}", method = RequestMethod.PATCH)
+    public ResponseEntity<RubricImportantDto> updateImportants(@PathVariable("classId") Long classroomId, @RequestBody List<UpdateImportantRequest> requests) {
+        Classroom classroom = service.findById(classroomId);
+        if (classroom == null) {
+            System.out.println("Classroom with id " + classroomId + " not found");
+            return new ResponseEntity<RubricImportantDto>(HttpStatus.NOT_FOUND);
+        }
+        for (UpdateImportantRequest request : requests) {
+            RubricImportant rubricImportant;
+            try {
+                rubricImportant = rubricImportantService.findById(request.getRubricImportantId());
+            } catch (Exception e) {
+                return new ResponseEntity<RubricImportantDto>(HttpStatus.NOT_FOUND);
+            }
+            if (rubricImportant.getClassroomId().equals(classroomId)) {
+                rubricImportant.setImportant(request.getNewImportant());
+                rubricImportantService.save(rubricImportant);
+                TranscriptData transcriptData = transcriptDataService.findByClassroom(classroom);
+                for (StudentTotalRubricPoint strp : transcriptData.getStudentTotalRubricPoints()) {
+                    strp = studentTotalRubricPointService.recalculator(strp);
+                    studentTotalRubricPointService.save(strp);
+                }
+                transcriptDataService.save(transcriptData);
+            } else {
+                return new ResponseEntity<RubricImportantDto>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        return new ResponseEntity<RubricImportantDto>(HttpStatus.OK);
+    }
 }
