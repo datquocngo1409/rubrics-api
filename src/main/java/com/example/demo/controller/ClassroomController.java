@@ -272,6 +272,25 @@ public class ClassroomController {
         return new ResponseEntity<List<Rubric>>(rubrics, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/classroom/getRubricImportants/{id}", method = RequestMethod.GET)
+    public ResponseEntity<List<RubricImportantDto>> getRubricImportants(@PathVariable("id") Long id) {
+        Classroom classroom = service.findById(id);
+        if (classroom == null) {
+            System.out.println("Classroom with id " + id + " not found");
+            return new ResponseEntity<List<RubricImportantDto>>(HttpStatus.NOT_FOUND);
+        }
+        TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
+        List<RubricImportantDto> rubricImportantDtos = new ArrayList<>();
+        for (RubricImportant ri : transcriptInfomation.getRubricImportantList()) {
+            rubricImportantDtos.add(new RubricImportantDto(ri));
+        }
+        if (rubricImportantDtos.size() == 0) {
+            System.out.println("Classroom with id " + id + " not found");
+            return new ResponseEntity<List<RubricImportantDto>>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<List<RubricImportantDto>>(rubricImportantDtos, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/classroom/addRubrics/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<ClassroomDto> addRubrics(@PathVariable("id") Long id, @RequestBody Map<String, String> parameters) {
         Classroom classroom = service.findById(id);
