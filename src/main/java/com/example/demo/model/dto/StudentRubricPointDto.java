@@ -8,6 +8,7 @@ public class StudentRubricPointDto {
     private Long id;
     private Long studentId;
     private String studentName;
+    private String studentCode;
     private Long rubricImportantId;
     private String rubricImportantName;
     private double rubricImportantImportant;
@@ -20,6 +21,7 @@ public class StudentRubricPointDto {
         this.id = srt.getId();
         this.studentId = srt.getStudent().getId();
         this.studentName = srt.getStudent().getName();
+        this.studentCode = srt.getStudent().getCode();
         this.rubricImportantId = srt.getRubricImportant().getId();
         this.rubricImportantName = srt.getRubricImportant().getRubric().getName();
         this.rubricImportantImportant = srt.getRubricImportant().getImportant();
