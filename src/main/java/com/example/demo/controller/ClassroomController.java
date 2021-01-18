@@ -405,6 +405,23 @@ public class ClassroomController {
         return new ResponseEntity<ClassroomDataDto>(new ClassroomDataDto(classroom, transcriptData), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/classroom/getData/detail/{classId}/{studentId}", method = RequestMethod.GET)
+    public ResponseEntity<List<StudentTotalRubricPointDto>> getDataDetail(@PathVariable("classId") Long classId, @PathVariable("studentId") Long studentId) {
+        Classroom classroom = service.findById(classId);
+        if (classroom == null) {
+            System.out.println("Classroom with id " + classId + " not found");
+            return new ResponseEntity<List<StudentTotalRubricPointDto>>(HttpStatus.NOT_FOUND);
+        }
+        TranscriptData transcriptData = transcriptDataService.findByClassroom(classroom);
+        List<StudentTotalRubricPointDto> studentTotalRubricPointDtos = new ArrayList<>();
+        for (StudentTotalRubricPoint strp : transcriptData.getStudentTotalRubricPoints()) {
+            if (strp.getStudentId().equals(studentId)) {
+                studentTotalRubricPointDtos.add(new StudentTotalRubricPointDto(strp));
+            }
+        }
+        return new ResponseEntity<List<StudentTotalRubricPointDto>>(studentTotalRubricPointDtos, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/classroom/updatePoints/{classId}", method = RequestMethod.PATCH)
     public ResponseEntity<Double> updatePoints(@PathVariable("classId") Long classroomId, @RequestBody List<UpdatePointRequest> datas) {
         Classroom classroom = service.findById(classroomId);
