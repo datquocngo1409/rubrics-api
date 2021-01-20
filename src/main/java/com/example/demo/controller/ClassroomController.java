@@ -277,7 +277,7 @@ public class ClassroomController {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
             System.out.println("Classroom with id " + id + " not found");
-            return new ResponseEntity<List<RubricImportantDto>>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<List<RubricImportantDto>>(new ArrayList<>(), HttpStatus.OK);
         }
         TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
         List<RubricImportantDto> rubricImportantDtos = new ArrayList<>();
