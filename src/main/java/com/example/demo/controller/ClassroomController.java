@@ -277,7 +277,7 @@ public class ClassroomController {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
             System.out.println("Classroom with id " + id + " not found");
-            return new ResponseEntity<List<RubricImportantDto>>(new ArrayList<>(), HttpStatus.OK);
+            return new ResponseEntity<List<RubricImportantDto>>(HttpStatus.NOT_FOUND);
         }
         TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
         List<RubricImportantDto> rubricImportantDtos = new ArrayList<>();
@@ -286,7 +286,7 @@ public class ClassroomController {
         }
         if (rubricImportantDtos.size() == 0) {
             System.out.println("Classroom with id " + id + " not found");
-            return new ResponseEntity<List<RubricImportantDto>>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<List<RubricImportantDto>>(new ArrayList<>(), HttpStatus.OK);
         }
         return new ResponseEntity<List<RubricImportantDto>>(rubricImportantDtos, HttpStatus.OK);
     }
