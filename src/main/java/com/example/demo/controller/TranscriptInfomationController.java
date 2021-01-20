@@ -37,10 +37,8 @@ public class TranscriptInfomationController {
     //Get TranscriptInfomation By Id
     @RequestMapping(value = "/transcript-infomation/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TranscriptInfomationDto> getById(@PathVariable("id") Long id) {
-        System.out.println("Fetching TranscriptInfomation with id " + id);
         TranscriptInfomation account = service.findById(id);
         if (account == null) {
-            System.out.println("TranscriptInfomation with id " + id + " not found");
             return new ResponseEntity<TranscriptInfomationDto>(HttpStatus.NOT_FOUND);
         }
         TranscriptInfomationDto dto = new TranscriptInfomationDto(account);
@@ -50,7 +48,6 @@ public class TranscriptInfomationController {
     //Create TranscriptInfomation
     @RequestMapping(value = "/transcript-infomation", method = RequestMethod.POST)
     public ResponseEntity<Void> create(@RequestBody TranscriptInfomation transcriptInfomation, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating TranscriptInfomation " + transcriptInfomation.getId());
         service.save(transcriptInfomation);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/transcript-infomation/{id}").buildAndExpand(transcriptInfomation.getId()).toUri());
@@ -60,12 +57,10 @@ public class TranscriptInfomationController {
     //Update TranscriptInfomation
     @RequestMapping(value = "/transcript-infomation/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<TranscriptInfomationDto> updateAdmin(@PathVariable("id") Long id, @RequestBody TranscriptInfomation transcriptInfomation) {
-        System.out.println("Updating TranscriptInfomation " + id);
 
         TranscriptInfomation current = service.findById(id);
 
         if (current == null) {
-            System.out.println("TranscriptInfomation with id " + id + " not found");
             return new ResponseEntity<TranscriptInfomationDto>(HttpStatus.NOT_FOUND);
         }
 
@@ -79,11 +74,9 @@ public class TranscriptInfomationController {
     //Delete TranscriptInfomation
     @RequestMapping(value = "/transcript-infomation/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<TranscriptInfomation> delete(@PathVariable("id") Long id) {
-        System.out.println("Fetching & Deleting TranscriptInfomation with id " + id);
 
         TranscriptInfomation transcriptInfomation = service.findById(id);
         if (transcriptInfomation == null) {
-            System.out.println("Unable to delete. TranscriptInfomation with id " + id + " not found");
             return new ResponseEntity<TranscriptInfomation>(HttpStatus.NOT_FOUND);
         }
 

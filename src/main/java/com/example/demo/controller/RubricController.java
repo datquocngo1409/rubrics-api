@@ -37,10 +37,8 @@ public class RubricController {
     //Get Rubric By Id
     @RequestMapping(value = "/rubric/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RubricDto> getById(@PathVariable("id") Long id) {
-        System.out.println("Fetching Rubric with id " + id);
         Rubric account = service.findById(id);
         if (account == null) {
-            System.out.println("Rubric with id " + id + " not found");
             return new ResponseEntity<RubricDto>(HttpStatus.NOT_FOUND);
         }
         RubricDto dto = new RubricDto(account);
@@ -50,7 +48,10 @@ public class RubricController {
     //Create Rubric
     @RequestMapping(value = "/rubric", method = RequestMethod.POST)
     public ResponseEntity<Void> create(@RequestBody Rubric rubric, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating Rubric " + rubric.getName());
+        List<Rubric> list = service.findAllByName(rubric.getName());
+        if (list.size() > 0) {
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+        }
         service.save(rubric);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/rubric/{id}").buildAndExpand(rubric.getId()).toUri());
@@ -60,12 +61,10 @@ public class RubricController {
     //Update Rubric
     @RequestMapping(value = "/rubric/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<RubricDto> updateAdmin(@PathVariable("id") Long id, @RequestBody Rubric rubric) {
-        System.out.println("Updating Rubric " + id);
 
         Rubric current = service.findById(id);
 
         if (current == null) {
-            System.out.println("Rubric with id " + id + " not found");
             return new ResponseEntity<RubricDto>(HttpStatus.NOT_FOUND);
         }
 
@@ -79,11 +78,9 @@ public class RubricController {
     //Delete Rubric
     @RequestMapping(value = "/rubric/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Rubric> delete(@PathVariable("id") Long id) {
-        System.out.println("Fetching & Deleting Rubric with id " + id);
 
         Rubric rubric = service.findById(id);
         if (rubric == null) {
-            System.out.println("Unable to delete. Rubric with id " + id + " not found");
             return new ResponseEntity<Rubric>(HttpStatus.NOT_FOUND);
         }
 

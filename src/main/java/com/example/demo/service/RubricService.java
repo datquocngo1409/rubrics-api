@@ -16,6 +16,10 @@ public class RubricService {
         return repository.findAll();
     }
 
+    public List<Rubric> findAllByName(String name) {
+        return repository.findAllByName(name);
+    }
+
     public Rubric findById(Long id) {
         return repository.findById(id).get();
     }

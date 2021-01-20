@@ -37,10 +37,8 @@ public class RubricImportantController {
     //Get Classroom By Id
     @RequestMapping(value = "/rubric-important/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RubricImportantDto> getById(@PathVariable("id") Long id) {
-        System.out.println("Fetching RubricImportant with id " + id);
         RubricImportant account = service.findById(id);
         if (account == null) {
-            System.out.println("RubricImportant with id " + id + " not found");
             return new ResponseEntity<RubricImportantDto>(HttpStatus.NOT_FOUND);
         }
         RubricImportantDto dto = new RubricImportantDto(account);
@@ -50,7 +48,6 @@ public class RubricImportantController {
     //Create RubricImportant
     @RequestMapping(value = "/rubric-important", method = RequestMethod.POST)
     public ResponseEntity<Void> create(@RequestBody RubricImportant rubricImportant, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating RubricImportant " + rubricImportant.getRubric().getName());
         service.save(rubricImportant);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/rubric-important/{id}").buildAndExpand(rubricImportant.getId()).toUri());
@@ -60,12 +57,10 @@ public class RubricImportantController {
     //Update RubricImportant
     @RequestMapping(value = "/rubric-important/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<RubricImportantDto> updateAdmin(@PathVariable("id") Long id, @RequestBody RubricImportant rubricImportant) {
-        System.out.println("Updating RubricImportant " + id);
 
         RubricImportant current = service.findById(id);
 
         if (current == null) {
-            System.out.println("RubricImportant with id " + id + " not found");
             return new ResponseEntity<RubricImportantDto>(HttpStatus.NOT_FOUND);
         }
 
@@ -79,11 +74,9 @@ public class RubricImportantController {
     //Delete RubricImportant
     @RequestMapping(value = "/rubric-important/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<RubricImportant> delete(@PathVariable("id") Long id) {
-        System.out.println("Fetching & Deleting RubricImportant with id " + id);
 
         RubricImportant rubricImportant = service.findById(id);
         if (rubricImportant == null) {
-            System.out.println("Unable to delete. RubricImportant with id " + id + " not found");
             return new ResponseEntity<RubricImportant>(HttpStatus.NOT_FOUND);
         }
 

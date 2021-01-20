@@ -37,10 +37,8 @@ public class StudentRubricPointController {
     //Get StudentRubricPoint By Id
     @RequestMapping(value = "/student-rubric-point/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StudentRubricPointDto> getById(@PathVariable("id") Long id) {
-        System.out.println("Fetching StudentRubricPoint with id " + id);
         StudentRubricPoint account = service.findById(id);
         if (account == null) {
-            System.out.println("StudentRubricPoint with id " + id + " not found");
             return new ResponseEntity<StudentRubricPointDto>(HttpStatus.NOT_FOUND);
         }
         StudentRubricPointDto dto = new StudentRubricPointDto(account);
@@ -50,7 +48,6 @@ public class StudentRubricPointController {
     //Create StudentRubricPoint
     @RequestMapping(value = "/student-rubric-point", method = RequestMethod.POST)
     public ResponseEntity<Void> create(@RequestBody StudentRubricPoint studentRubricPoint, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating StudentRubricPoint " + studentRubricPoint.getId());
         service.save(studentRubricPoint);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/student-rubric-point/{id}").buildAndExpand(studentRubricPoint.getId()).toUri());
@@ -60,12 +57,10 @@ public class StudentRubricPointController {
     //Update StudentRubricPoint
     @RequestMapping(value = "/student-rubric-point/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<StudentRubricPointDto> updateAdmin(@PathVariable("id") Long id, @RequestBody StudentRubricPoint studentRubricPoint) {
-        System.out.println("Updating StudentRubricPoint " + id);
 
         StudentRubricPoint current = service.findById(id);
 
         if (current == null) {
-            System.out.println("StudentRubricPoint with id " + id + " not found");
             return new ResponseEntity<StudentRubricPointDto>(HttpStatus.NOT_FOUND);
         }
 
@@ -79,11 +74,9 @@ public class StudentRubricPointController {
     //Delete StudentRubricPoint
     @RequestMapping(value = "/student-rubric-point/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<StudentRubricPoint> delete(@PathVariable("id") Long id) {
-        System.out.println("Fetching & Deleting StudentRubricPoint with id " + id);
 
         StudentRubricPoint studentRubricPoint = service.findById(id);
         if (studentRubricPoint == null) {
-            System.out.println("Unable to delete. StudentRubricPoint with id " + id + " not found");
             return new ResponseEntity<StudentRubricPoint>(HttpStatus.NOT_FOUND);
         }
 

@@ -85,10 +85,8 @@ public class UserController {
     //Get User By Id
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id) {
-        System.out.println("Fetching User with id " + id);
         User account = userService.findById(id);
         if (account == null) {
-            System.out.println("User with id " + id + " not found");
             return new ResponseEntity<UserDto>(HttpStatus.NOT_FOUND);
         }
         UserDto userDto = new UserDto(account);
@@ -97,10 +95,8 @@ public class UserController {
 
     @RequestMapping(value = "/user/getByUsername/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> getUserById(@PathVariable("username") String username) {
-        System.out.println("Fetching User with username " + username);
         User account = userService.findByUsername(username);
         if (account == null) {
-            System.out.println("User with username " + username + " not found");
             return new ResponseEntity<UserDto>(HttpStatus.NOT_FOUND);
         }
         UserDto userDto = new UserDto(account);
@@ -110,7 +106,6 @@ public class UserController {
     //Create User
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating User " + user.getName());
         userService.updateUser(user);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
@@ -120,7 +115,6 @@ public class UserController {
     //Create Student
     @RequestMapping(value = "/student", method = RequestMethod.POST)
     public ResponseEntity<Void> createStudent(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating Student " + user.getName());
         user.setRole("STUDENT");
         userService.updateUser(user);
         HttpHeaders headers = new HttpHeaders();
@@ -131,7 +125,6 @@ public class UserController {
     //Create Student
     @RequestMapping(value = "/teacher", method = RequestMethod.POST)
     public ResponseEntity<Void> createTeacher(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating Teacher " + user.getName());
         user.setRole("TEACHER");
         userService.updateUser(user);
         HttpHeaders headers = new HttpHeaders();
@@ -142,7 +135,6 @@ public class UserController {
     //Create Student
     @RequestMapping(value = "/admin", method = RequestMethod.POST)
     public ResponseEntity<Void> createAdmin(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating Student " + user.getName());
         user.setRole("ADMIN");
         userService.updateUser(user);
         HttpHeaders headers = new HttpHeaders();
@@ -153,12 +145,10 @@ public class UserController {
     //Update User
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<UserDto> updateAdmin(@PathVariable("id") Long id, @RequestBody User user) {
-        System.out.println("Updating User " + id);
 
         User curremUser = userService.findById(id);
 
         if (curremUser == null) {
-            System.out.println("User with id " + id + " not found");
             return new ResponseEntity<UserDto>(HttpStatus.NOT_FOUND);
         }
 
@@ -172,11 +162,9 @@ public class UserController {
     //Delete User
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
-        System.out.println("Fetching & Deleting User with id " + id);
 
         User user = userService.findById(id);
         if (user == null) {
-            System.out.println("Unable to delete. User with id " + id + " not found");
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
 

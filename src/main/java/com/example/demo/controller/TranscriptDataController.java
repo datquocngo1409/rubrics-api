@@ -37,10 +37,8 @@ public class TranscriptDataController {
     //Get TranscriptData By Id
     @RequestMapping(value = "/transcript-data/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TranscriptDataDto> getById(@PathVariable("id") Long id) {
-        System.out.println("Fetching TranscriptData with id " + id);
         TranscriptData account = service.findById(id);
         if (account == null) {
-            System.out.println("TranscriptData with id " + id + " not found");
             return new ResponseEntity<TranscriptDataDto>(HttpStatus.NOT_FOUND);
         }
         TranscriptDataDto dto = new TranscriptDataDto(account);
@@ -50,7 +48,6 @@ public class TranscriptDataController {
     //Create TranscriptData
     @RequestMapping(value = "/transcript-data", method = RequestMethod.POST)
     public ResponseEntity<Void> create(@RequestBody TranscriptData transcriptData, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating TranscriptData " + transcriptData.getId());
         service.save(transcriptData);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/transcript-data/{id}").buildAndExpand(transcriptData.getId()).toUri());
@@ -60,12 +57,10 @@ public class TranscriptDataController {
     //Update TranscriptData
     @RequestMapping(value = "/transcript-data/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<TranscriptDataDto> updateAdmin(@PathVariable("id") Long id, @RequestBody TranscriptData transcriptData) {
-        System.out.println("Updating TranscriptData " + id);
 
         TranscriptData current = service.findById(id);
 
         if (current == null) {
-            System.out.println("TranscriptData with id " + id + " not found");
             return new ResponseEntity<TranscriptDataDto>(HttpStatus.NOT_FOUND);
         }
 
@@ -79,11 +74,9 @@ public class TranscriptDataController {
     //Delete TranscriptData
     @RequestMapping(value = "/transcript-data/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<TranscriptData> delete(@PathVariable("id") Long id) {
-        System.out.println("Fetching & Deleting TranscriptData with id " + id);
 
         TranscriptData transcriptData = service.findById(id);
         if (transcriptData == null) {
-            System.out.println("Unable to delete. TranscriptData with id " + id + " not found");
             return new ResponseEntity<TranscriptData>(HttpStatus.NOT_FOUND);
         }
 

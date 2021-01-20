@@ -57,7 +57,6 @@ public class ClassroomController {
     public ResponseEntity<ClassroomDto> getById(@PathVariable("id") Long id) {
         Classroom account = service.findById(id);
         if (account == null) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<ClassroomDto>(HttpStatus.NOT_FOUND);
         }
         ClassroomDto dto = new ClassroomDto(account);
@@ -95,7 +94,6 @@ public class ClassroomController {
         Classroom current = service.findById(id);
 
         if (current == null) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<ClassroomDto>(HttpStatus.NOT_FOUND);
         }
 
@@ -113,7 +111,6 @@ public class ClassroomController {
     public ResponseEntity<Classroom> delete(@PathVariable("id") Long id) {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
-            System.out.println("Unable to delete. Classroom with id " + id + " not found");
             return new ResponseEntity<Classroom>(HttpStatus.NOT_FOUND);
         }
 
@@ -126,12 +123,10 @@ public class ClassroomController {
     public ResponseEntity<ClassroomDto> updateTeacherInClassroom(@PathVariable("id") Long id, @PathVariable("teacherId") Long teacherId) {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<ClassroomDto>(HttpStatus.NOT_FOUND);
         }
         User teacher = userService.findById(teacherId);
         if (teacher == null || !teacher.getRole().equals("TEACHER")) {
-            System.out.println("Teacher with id " + teacherId + " not found");
             return new ResponseEntity<ClassroomDto>(HttpStatus.NOT_FOUND);
         }
         classroom.setTeacher(teacher);
@@ -145,7 +140,6 @@ public class ClassroomController {
     public ResponseEntity<ClassroomDto> addStudent(@PathVariable("id") Long id, @RequestBody Map<String, String> parameters) {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<ClassroomDto>(HttpStatus.NOT_FOUND);
         }
         String studentIdList = parameters.get("studentIdList");
@@ -168,11 +162,9 @@ public class ClassroomController {
             Long studentId = Long.parseLong(studentIdString);
             User student = userService.findById(studentId);
             if (student == null || !student.getRole().equals("STUDENT")) {
-                System.out.println("Student with id " + studentId + " not found");
                 continue;
             }
             if (students.contains(student)) {
-                System.out.println("Student with id " + studentId + " existed");
                 continue;
             }
             List<StudentRubricPoint> studentRubricPoints = new ArrayList<>();
@@ -198,7 +190,6 @@ public class ClassroomController {
     public ResponseEntity<ClassroomDto> deleteStudent(@PathVariable("id") Long id, @RequestBody Map<String, String> parameters) {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<ClassroomDto>(HttpStatus.NOT_FOUND);
         }
         String studentIdList = parameters.get("studentIdList");
@@ -213,11 +204,9 @@ public class ClassroomController {
             Long studentId = Long.parseLong(studentIdString);
             User student = userService.findById(studentId);
             if (student == null || !student.getRole().equals("STUDENT")) {
-                System.out.println("Student with id " + studentId + " not found");
                 continue;
             }
             if (!students.contains(student)) {
-                System.out.println("Student with id " + studentId + " not found");
                 continue;
             }
             for (int i = 0; i < transcriptData.getStudentTotalRubricPoints().size(); i++) {
@@ -245,7 +234,6 @@ public class ClassroomController {
     public ResponseEntity<ClassroomDto> updateName(@PathVariable("id") Long id, @PathVariable("name") String name) {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<ClassroomDto>(HttpStatus.NOT_FOUND);
         }
         classroom.setName(name);
@@ -257,7 +245,6 @@ public class ClassroomController {
     public ResponseEntity<List<Rubric>> getRubrics(@PathVariable("id") Long id) {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<List<Rubric>>(HttpStatus.NOT_FOUND);
         }
         TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
@@ -266,7 +253,6 @@ public class ClassroomController {
             rubrics.add(ri.getRubric());
         }
         if (rubrics.size() == 0) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<List<Rubric>>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<List<Rubric>>(rubrics, HttpStatus.OK);
@@ -276,7 +262,6 @@ public class ClassroomController {
     public ResponseEntity<List<RubricImportantDto>> getRubricImportants(@PathVariable("id") Long id) {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<List<RubricImportantDto>>(HttpStatus.NOT_FOUND);
         }
         TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
@@ -285,7 +270,6 @@ public class ClassroomController {
             rubricImportantDtos.add(new RubricImportantDto(ri));
         }
         if (rubricImportantDtos.size() == 0) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<List<RubricImportantDto>>(new ArrayList<>(), HttpStatus.OK);
         }
         return new ResponseEntity<List<RubricImportantDto>>(rubricImportantDtos, HttpStatus.OK);
@@ -295,7 +279,6 @@ public class ClassroomController {
     public ResponseEntity<ClassroomDto> addRubrics(@PathVariable("id") Long id, @RequestBody Map<String, String> parameters) {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<ClassroomDto>(HttpStatus.NOT_FOUND);
         }
         TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
@@ -351,7 +334,6 @@ public class ClassroomController {
     public ResponseEntity<ClassroomDto> deleteRubrics(@PathVariable("id") Long id, @RequestBody Map<String, String> parameters) {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<ClassroomDto>(HttpStatus.NOT_FOUND);
         }
         TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
@@ -398,7 +380,6 @@ public class ClassroomController {
     public ResponseEntity<ClassroomDataDto> getData(@PathVariable("id") Long id) {
         Classroom classroom = service.findById(id);
         if (classroom == null) {
-            System.out.println("Classroom with id " + id + " not found");
             return new ResponseEntity<ClassroomDataDto>(HttpStatus.NOT_FOUND);
         }
         TranscriptData transcriptData = transcriptDataService.findByClassroom(classroom);
@@ -409,7 +390,6 @@ public class ClassroomController {
     public ResponseEntity<List<StudentTotalRubricPointDto>> getDataDetail(@PathVariable("classId") Long classId, @PathVariable("studentId") Long studentId) {
         Classroom classroom = service.findById(classId);
         if (classroom == null) {
-            System.out.println("Classroom with id " + classId + " not found");
             return new ResponseEntity<List<StudentTotalRubricPointDto>>(HttpStatus.NOT_FOUND);
         }
         TranscriptData transcriptData = transcriptDataService.findByClassroom(classroom);
@@ -426,7 +406,6 @@ public class ClassroomController {
     public ResponseEntity<Double> updatePoints(@PathVariable("classId") Long classroomId, @RequestBody List<UpdatePointRequest> datas) {
         Classroom classroom = service.findById(classroomId);
         if (classroom == null) {
-            System.out.println("Classroom with id " + classroomId + " not found");
             return new ResponseEntity<Double>(HttpStatus.NOT_FOUND);
         }
         for (UpdatePointRequest data : datas) {
@@ -465,7 +444,6 @@ public class ClassroomController {
     public ResponseEntity<RubricImportantDto> updateImportant(@PathVariable("classId") Long classroomId, @RequestBody UpdateImportantRequest request) {
         Classroom classroom = service.findById(classroomId);
         if (classroom == null) {
-            System.out.println("Classroom with id " + classroomId + " not found");
             return new ResponseEntity<RubricImportantDto>(HttpStatus.NOT_FOUND);
         }
         RubricImportant rubricImportant;
@@ -493,7 +471,6 @@ public class ClassroomController {
     public ResponseEntity<RubricImportantDto> updateImportants(@PathVariable("classId") Long classroomId, @RequestBody List<UpdateImportantRequest> requests) {
         Classroom classroom = service.findById(classroomId);
         if (classroom == null) {
-            System.out.println("Classroom with id " + classroomId + " not found");
             return new ResponseEntity<RubricImportantDto>(HttpStatus.NOT_FOUND);
         }
         for (UpdateImportantRequest request : requests) {
