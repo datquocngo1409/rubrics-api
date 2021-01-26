@@ -13,6 +13,8 @@ public class RequestRubric {
 
     private boolean created = false;
 
+    private String requestUser;
+
     public RequestRubric() {
     }
 
@@ -20,6 +22,13 @@ public class RequestRubric {
         this.id = id;
         this.name = name;
         this.created = false;
+    }
+
+    public RequestRubric(Long id, String name, String requestUser) {
+        this.id = id;
+        this.name = name;
+        this.created = false;
+        this.requestUser = requestUser;
     }
 
     public Long getId() {
@@ -44,5 +53,13 @@ public class RequestRubric {
 
     public void setCreated(boolean created) {
         this.created = created;
+    }
+
+    public String getRequestUser() {
+        return requestUser;
+    }
+
+    public void setRequestUser(String requestUser) {
+        this.requestUser = requestUser;
     }
 }
