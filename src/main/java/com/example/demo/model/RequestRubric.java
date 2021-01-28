@@ -18,12 +18,6 @@ public class RequestRubric {
     public RequestRubric() {
     }
 
-    public RequestRubric(Long id, String name) {
-        this.id = id;
-        this.name = name;
-        this.created = false;
-    }
-
     public RequestRubric(Long id, String name, String requestUser) {
         this.id = id;
         this.name = name;
