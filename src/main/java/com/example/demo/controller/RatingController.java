@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.Rubric;
 import com.example.demo.model.dto.ClassroomRatingDto;
 import com.example.demo.model.dto.RubricDto;
+import com.example.demo.model.dto.StudentRatingDto;
 import com.example.demo.model.rating.ClassroomRating;
 import com.example.demo.model.rating.StudentRating;
 import com.example.demo.model.request.ClassroomRatingRequest;
@@ -44,6 +45,20 @@ public class RatingController {
         }
         ClassroomRatingDto dto = new ClassroomRatingDto(classroomRating);
         return new ResponseEntity<ClassroomRatingDto>(dto, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/rating/classroom/{id}/getRating", method = RequestMethod.GET)
+    public ResponseEntity<List<StudentRatingDto>> listRating(@PathVariable("id") Long id) {
+        List<StudentRating> studentRatingList = studentRatingService.findAllBySubject(classroomService.findById(id));
+        if (studentRatingList.isEmpty()) {
+            return new ResponseEntity<List<StudentRatingDto>>(HttpStatus.NO_CONTENT);
+        }
+        List<StudentRatingDto> dtos = new ArrayList<>();
+        for (StudentRating sr : studentRatingList) {
+            StudentRatingDto dto = new StudentRatingDto(sr);
+            dtos.add(dto);
+        }
+        return new ResponseEntity<List<StudentRatingDto>>(dtos, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/rating/classroom/{id}/rate", method = RequestMethod.POST)
