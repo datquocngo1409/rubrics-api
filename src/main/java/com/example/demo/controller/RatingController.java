@@ -57,6 +57,7 @@ public class RatingController {
         StudentRating ratingOld = studentRatingService.findBySubjectAndStudent(classroomRating.getSubject(), rating.getStudent());
         if (ratingOld == null) {
             classroomRating.setPoint((classroomRating.getPoint() * classroomRating.getCount() + rating.getPoint()) / (classroomRating.getCount() + 1));
+            classroomRating.setCount(classroomRating.getCount() + 1);
             studentRatingService.save(rating);
             classroomRatingService.save(classroomRating);
         } else {
@@ -71,6 +72,8 @@ public class RatingController {
     @RequestMapping(value = "/rating/classroom/{id}", method = RequestMethod.PATCH)
     public ResponseEntity<ClassroomRatingDto> update(@PathVariable("id") Long id, @RequestBody ClassroomRatingRequest request) {
         ClassroomRating classroomRating = classroomRatingService.findBySubject(classroomService.findById(request.getSubjectId()));
+        classroomRating.setPoint(request.getPoint());
+        classroomRating.setCount(request.getCount());
         if (classroomRating == null) {
             classroomRating = new ClassroomRating(classroomService.findById(id));
         }
