@@ -25,8 +25,7 @@ public class StudentRating {
     public StudentRating() {
     }
 
-    public StudentRating(Long id, User student, Classroom subject, String content, double point) {
-        this.id = id;
+    public StudentRating(User student, Classroom subject, String content, double point) {
         this.student = student;
         this.subject = subject;
         this.content = content;

@@ -53,7 +53,7 @@ public class RatingController {
             classroomRating = new ClassroomRating(classroomService.findById(id));
             classroomRatingService.save(classroomRating);
         }
-        StudentRating rating = studentRatingService.findBySubjectAndStudent(classroomService.findById(ratingRequest.getSubjectId()), userService.findById(ratingRequest.getStudentId()));
+        StudentRating rating = new StudentRating(userService.findById(ratingRequest.getStudentId()), classroomService.findById(ratingRequest.getSubjectId()), ratingRequest.getContent(), ratingRequest.getPoint());
         StudentRating ratingOld = studentRatingService.findBySubjectAndStudent(classroomRating.getSubject(), rating.getStudent());
         if (ratingOld == null) {
             classroomRating.setPoint((classroomRating.getPoint() * classroomRating.getCount() + rating.getPoint()) / (classroomRating.getCount() + 1));
