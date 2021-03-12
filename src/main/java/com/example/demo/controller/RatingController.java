@@ -77,7 +77,9 @@ public class RatingController {
             classroomRatingService.save(classroomRating);
         } else {
             classroomRating.setPoint((classroomRating.getPoint() * classroomRating.getCount() + rating.getPoint() - ratingOld.getPoint()) / (classroomRating.getCount()));
-            studentRatingService.save(rating);
+            ratingOld.setPoint(ratingRequest.getPoint());
+            ratingOld.setContent(ratingRequest.getContent());
+            studentRatingService.save(ratingOld);
             classroomRatingService.save(classroomRating);
         }
         ClassroomRatingDto dto = new ClassroomRatingDto(classroomRating);

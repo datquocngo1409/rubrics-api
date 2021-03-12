@@ -21,7 +21,7 @@ public class StudentRatingDto {
         this.studentId = studentRating.getStudent().getId();
         this.studentName = studentRating.getStudent().getName();
         this.subjectId = studentRating.getSubject().getId();
-        this.studentName = studentRating.getSubject().getName();
+        this.subjectName = studentRating.getSubject().getName();
         this.point = studentRating.getPoint();
         this.content = studentRating.getContent();
     }
