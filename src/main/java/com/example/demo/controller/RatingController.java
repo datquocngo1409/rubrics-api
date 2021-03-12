@@ -98,4 +98,22 @@ public class RatingController {
         ClassroomRatingDto dto = new ClassroomRatingDto(classroomRating);
         return new ResponseEntity<ClassroomRatingDto>(dto, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/rating/classroom/{id}/rate", method = RequestMethod.DELETE)
+    public ResponseEntity<ClassroomRatingDto> deleteRating(@PathVariable("id") Long id, @RequestBody RatingRequest ratingRequest) {
+        ClassroomRating classroomRating = classroomRatingService.findBySubject(classroomService.findById(id));
+        if (classroomRating == null) {
+            classroomRating = new ClassroomRating(classroomService.findById(id));
+            classroomRatingService.save(classroomRating);
+        }
+        StudentRating ratingOld = studentRatingService.findBySubjectAndStudent(classroomService.findById(ratingRequest.getSubjectId()), userService.findById(ratingRequest.getStudentId()));
+        if (ratingOld != null) {
+            classroomRating.setPoint((classroomRating.getPoint() * classroomRating.getCount() - ratingOld.getPoint()) / (classroomRating.getCount() - 1));
+            classroomRating.setCount(classroomRating.getCount() - 1);
+            classroomRatingService.save(classroomRating);
+            studentRatingService.delete(ratingOld.getId());
+            return new ResponseEntity<ClassroomRatingDto>(HttpStatus.OK);
+        }
+        return new ResponseEntity<ClassroomRatingDto>(HttpStatus.NO_CONTENT);
+    }
 }
