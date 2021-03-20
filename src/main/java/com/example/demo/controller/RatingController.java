@@ -36,8 +36,22 @@ public class RatingController {
     @Autowired
     private ClassroomService classroomService;
 
+    @RequestMapping(value = "/rating/classroom", method = RequestMethod.GET)
+    public ResponseEntity<List<ClassroomRatingDto>> listAll() {
+        List<ClassroomRating> all = classroomRatingService.findAll();
+        if (all.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        List<ClassroomRatingDto> dtos = new ArrayList<>();
+        for (ClassroomRating cr : all) {
+            ClassroomRatingDto dto = new ClassroomRatingDto(cr);
+            dtos.add(dto);
+        }
+        return new ResponseEntity<List<ClassroomRatingDto>>(dtos, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/rating/classroom/{id}", method = RequestMethod.GET)
-    public ResponseEntity<ClassroomRatingDto> listAll(@PathVariable("id") Long id) {
+    public ResponseEntity<ClassroomRatingDto> listAllByClassroom(@PathVariable("id") Long id) {
         ClassroomRating classroomRating = classroomRatingService.findBySubject(classroomService.findById(id));
         if (classroomRating == null) {
             classroomRating = new ClassroomRating(classroomService.findById(id));
