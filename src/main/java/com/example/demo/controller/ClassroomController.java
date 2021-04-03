@@ -266,6 +266,9 @@ public class ClassroomController {
         }
         TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
         List<RubricImportantDto> rubricImportantDtos = new ArrayList<>();
+        List<RubricImportant> list = rubricImportantService.findAllByClassroomId(id);
+        transcriptInfomation.setRubricImportantList(list);
+        transcriptInfomationService.save(transcriptInfomation);
         for (RubricImportant ri : transcriptInfomation.getRubricImportantList()) {
             rubricImportantDtos.add(new RubricImportantDto(ri));
         }
@@ -299,7 +302,7 @@ public class ClassroomController {
                 continue;
             }
             double important = Double.parseDouble(importantIdArray[i]);
-            RubricImportant rubricImportant = rubricImportantService.findByRubricAndImportant(rubric, important);
+            RubricImportant rubricImportant = rubricImportantService.findByRubricAndImportantAndClassroom(rubric, important, id);
             if (rubricImportant == null) {
                 rubricImportant = new RubricImportant(rubric, Double.parseDouble(importantIdArray[i]), classroom.getId());
                 rubricImportantService.save(rubricImportant);
@@ -327,6 +330,9 @@ public class ClassroomController {
         transcriptData.setTranscriptInnfomation(transcriptInfomation);
         transcriptDataService.save(transcriptData);
         service.save(classroom);
+        List<RubricImportant> list = rubricImportantService.findAllByClassroomId(id);
+        transcriptInfomation.setRubricImportantList(list);
+        transcriptInfomationService.save(transcriptInfomation);
         return new ResponseEntity<ClassroomDto>(new ClassroomDto(classroom), HttpStatus.OK);
     }
 
@@ -371,6 +377,9 @@ public class ClassroomController {
             }
             classroomRubricImportantList.removeIf(ri -> ri.getId().equals(rubricImportant.getId()));
             transcriptInfomation.setRubricImportantList(classroomRubricImportantList);
+            transcriptInfomationService.save(transcriptInfomation);
+            List<RubricImportant> list = rubricImportantService.findAllByClassroomId(id);
+            transcriptInfomation.setRubricImportantList(list);
             transcriptInfomationService.save(transcriptInfomation);
         }
         return new ResponseEntity<ClassroomDto>(new ClassroomDto(classroom), HttpStatus.OK);

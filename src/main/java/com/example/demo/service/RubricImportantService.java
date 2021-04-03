@@ -17,12 +17,20 @@ public class RubricImportantService {
         return repository.findAll();
     }
 
+    public List<RubricImportant> findAllByClassroomId(Long classroomId) {
+        return repository.findAllByClassroomId(classroomId);
+    }
+
     public RubricImportant findById(Long id) {
         return repository.findById(id).get();
     }
 
     public RubricImportant findByRubricAndImportant(Rubric rubric, double important) {
         return repository.findByRubricAndImportant(rubric, important);
+    }
+
+    public RubricImportant findByRubricAndImportantAndClassroom(Rubric rubric, double important, Long classroomId) {
+        return repository.findByRubricAndImportantAndClassroomId(rubric, important, classroomId);
     }
 
     public void create(RubricImportant model) {
