@@ -348,6 +348,8 @@ public class ClassroomController {
             try {
                 rubricImportant = rubricImportantService.findById(Long.parseLong(rubricImportantId));
             } catch (Exception e) {
+                System.out.println("rubricImportantId: " + rubricImportantId);
+                System.out.println(e.getMessage());
                 continue;
             }
             if (!rubricImportant.getClassroomId().equals(id)) {
