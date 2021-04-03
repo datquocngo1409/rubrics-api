@@ -34,6 +34,8 @@ public class ClassroomController {
     public StudentRubricPointService studentRubricPointService;
     @Autowired
     public StudentTotalRubricPointService studentTotalRubricPointService;
+    @Autowired
+    public TranscriptInfomationService transcriptInfomationService;
 
     //Get List Classroom
     @RequestMapping(value = "/classroom", method = RequestMethod.GET)
@@ -379,8 +381,28 @@ public class ClassroomController {
                 }
             }
             classroomRubricImportantList.removeIf(ri -> ri.getId().equals(rubricImportant.getId()));
-            rubricImportant.setRubric(null);
-            rubricImportantService.save(rubricImportant);
+
+            // delete Rubric Important in TranscriptInfomation
+            TranscriptInfomation transcriptInfomation = transcriptData.getTranscriptInnfomation();
+            List<RubricImportant> transcriptInfomationRIList = transcriptInfomation.getRubricImportantList();
+            transcriptInfomationRIList.remove(rubricImportant);
+            transcriptInfomation.setRubricImportantList(transcriptInfomationRIList);
+            transcriptInfomationService.save(transcriptInfomation);
+
+            // delete StudentRubircPoint
+            List<StudentRubricPoint> studentRubricPointList = studentRubricPointService.findAllByRubricImportant(rubricImportant);
+            for (StudentTotalRubricPoint strp : transcriptData.getStudentTotalRubricPoints()) {
+                for (StudentRubricPoint srp : studentRubricPointList) {
+                    if (strp.getStudentRubricPoint().contains(srp)) {
+                        List<StudentRubricPoint> srpList = strp.getStudentRubricPoint();
+                        srpList.remove(srp);
+                        strp.setStudentRubricPoint(srpList);
+                        studentTotalRubricPointService.save(strp);
+                        studentRubricPointService.delete(srp.getId());
+                    }
+                }
+            }
+
             rubricImportantService.delete(rubricImportant.getId());
         }
         return new ResponseEntity<ClassroomDto>(new ClassroomDto(classroom), HttpStatus.OK);

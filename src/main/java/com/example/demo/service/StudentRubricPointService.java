@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.model.RubricImportant;
 import com.example.demo.model.StudentRubricPoint;
 import com.example.demo.repository.StudentRubricPointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ public class StudentRubricPointService {
 
     public StudentRubricPoint findById(Long id) {
         return repository.findById(id).get();
+    }
+
+    public List<StudentRubricPoint> findAllByRubricImportant(RubricImportant rubricImportant) {
+        return repository.findAllByRubricImportant(rubricImportant);
     }
 
     public void create(StudentRubricPoint model) {
