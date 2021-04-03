@@ -302,13 +302,14 @@ public class ClassroomController {
             }
             double important = Double.parseDouble(importantIdArray[i]);
             RubricImportant rubricImportant = rubricImportantService.findByRubricAndImportant(rubric, important);
-            System.out.println(rubricImportant);
             if (rubricImportant == null) {
                 rubricImportant = new RubricImportant(rubric, Double.parseDouble(importantIdArray[i]), classroom.getId());
                 rubricImportantService.save(rubricImportant);
             }
             if (!classroomRubricImportantList.contains(rubricImportant)) {
                 System.out.println("No contain");
+                System.out.println(rubricImportant.getRubric().getName());
+                System.out.println(rubricImportant.getClassroomId());
                 rubricImportantService.save(rubricImportant);
                 for (User student : classroom.getStudents()) {
                     StudentRubricPoint studentRubricPoint = new StudentRubricPoint(student, rubricImportant, 0);
