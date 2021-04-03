@@ -25,8 +25,6 @@ public class ClassroomController {
     @Autowired
     public UserService userService;
     @Autowired
-    public TranscriptInfomationService transcriptInfomationService;
-    @Autowired
     public TranscriptDataService transcriptDataService;
     @Autowired
     public RubricService rubricService;
@@ -70,16 +68,9 @@ public class ClassroomController {
         classroom.setTeacher(teacher);
         service.save(classroom);
 
-        // Create Transcript Infomation
-        TranscriptInfomation transcriptInfomation = new TranscriptInfomation();
-        transcriptInfomation.setClassroom(classroom);
-        transcriptInfomation.setRubricImportantList(new ArrayList<>());
-        transcriptInfomationService.save(transcriptInfomation);
-
         // Create Transcript Data
         TranscriptData transcriptData = new TranscriptData();
         transcriptData.setClassroom(classroom);
-        transcriptData.setTranscriptInnfomation(transcriptInfomation);
         transcriptData.setStudentTotalRubricPoints(new ArrayList<>());
         transcriptDataService.save(transcriptData);
 
@@ -144,7 +135,6 @@ public class ClassroomController {
         }
         String studentIdList = parameters.get("studentIdList");
         String[] studentIdArray = studentIdList.split(",");
-        TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
         TranscriptData transcriptData = transcriptDataService.findByClassroom(classroom);
 
         List<StudentTotalRubricPoint> studentTotalRubricPoints = transcriptData.getStudentTotalRubricPoints();
@@ -152,7 +142,13 @@ public class ClassroomController {
             studentTotalRubricPoints = new ArrayList<>();
         }
 
-        List<RubricImportant> rubricImportantList = transcriptInfomation.getRubricImportantList();
+        List<RubricImportant> list = rubricImportantService.findAll();
+        List<RubricImportant> rubricImportantList = new ArrayList<>();
+        for (RubricImportant ri : list) {
+            if (ri.getClassroomId().equals(id)) {
+                rubricImportantList.add(ri);
+            }
+        }
 
         List<User> students = classroom.getStudents();
         if (students == null) {
@@ -247,10 +243,12 @@ public class ClassroomController {
         if (classroom == null) {
             return new ResponseEntity<List<Rubric>>(HttpStatus.NOT_FOUND);
         }
-        TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
+        List<RubricImportant> list = rubricImportantService.findAll();
         List<Rubric> rubrics = new ArrayList<>();
-        for (RubricImportant ri : transcriptInfomation.getRubricImportantList()) {
-            rubrics.add(ri.getRubric());
+        for (RubricImportant ri : list) {
+            if (ri.getClassroomId().equals(id)) {
+                rubrics.add(ri.getRubric());
+            }
         }
         if (rubrics.size() == 0) {
             return new ResponseEntity<List<Rubric>>(HttpStatus.NOT_FOUND);
@@ -264,7 +262,6 @@ public class ClassroomController {
         if (classroom == null) {
             return new ResponseEntity<List<RubricImportantDto>>(HttpStatus.NOT_FOUND);
         }
-        TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
         List<RubricImportantDto> rubricImportantDtos = new ArrayList<>();
         List<RubricImportant> list = rubricImportantService.findAll();
         for (RubricImportant ri : list) {
@@ -284,12 +281,14 @@ public class ClassroomController {
         if (classroom == null) {
             return new ResponseEntity<ClassroomDto>(HttpStatus.NOT_FOUND);
         }
-        TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
         TranscriptData transcriptData = transcriptDataService.findByClassroom(classroom);
         List<StudentTotalRubricPoint> studentTotalRubricPoints = transcriptData.getStudentTotalRubricPoints();
-        List<RubricImportant> classroomRubricImportantList = transcriptInfomation.getRubricImportantList();
-        if (classroomRubricImportantList == null) {
-            classroomRubricImportantList = new ArrayList<>();
+        List<RubricImportant> list = rubricImportantService.findAll();
+        List<RubricImportant> classroomRubricImportantList = new ArrayList<>();
+        for (RubricImportant ri : list) {
+            if (ri.getClassroomId().equals(id)) {
+                classroomRubricImportantList.add(ri);
+            }
         }
         String rubricIdList = parameters.get("rubricIdList");
         String[] rubricIdArray = rubricIdList.split(",");
@@ -325,9 +324,6 @@ public class ClassroomController {
                 classroomRubricImportantList.add(rubricImportant);
             }
         }
-        transcriptInfomation.setRubricImportantList(classroomRubricImportantList);
-        transcriptInfomationService.save(transcriptInfomation);
-        transcriptData.setTranscriptInnfomation(transcriptInfomation);
         transcriptDataService.save(transcriptData);
         service.save(classroom);
         return new ResponseEntity<ClassroomDto>(new ClassroomDto(classroom), HttpStatus.OK);
@@ -339,10 +335,15 @@ public class ClassroomController {
         if (classroom == null) {
             return new ResponseEntity<ClassroomDto>(HttpStatus.NOT_FOUND);
         }
-        TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
         TranscriptData transcriptData = transcriptDataService.findByClassroom(classroom);
         List<StudentTotalRubricPoint> studentTotalRubricPoints = transcriptData.getStudentTotalRubricPoints();
-        List<RubricImportant> classroomRubricImportantList = transcriptInfomation.getRubricImportantList();
+        List<RubricImportant> list = rubricImportantService.findAll();
+        List<RubricImportant> classroomRubricImportantList = new ArrayList<>();
+        for (RubricImportant ri : list) {
+            if (ri.getClassroomId().equals(id)) {
+                classroomRubricImportantList.add(ri);
+            }
+        }
 
         String rubricImportantIdList = parameters.get("rubricImportantIdList");
         String[] rubricImportantArray = rubricImportantIdList.split(",");
@@ -375,8 +376,6 @@ public class ClassroomController {
                 }
             }
             classroomRubricImportantList.removeIf(ri -> ri.getId().equals(rubricImportant.getId()));
-            transcriptInfomation.setRubricImportantList(classroomRubricImportantList);
-            transcriptInfomationService.save(transcriptInfomation);
         }
         return new ResponseEntity<ClassroomDto>(new ClassroomDto(classroom), HttpStatus.OK);
     }
