@@ -17,8 +17,13 @@ public class RubricImportantDto {
 
     public RubricImportantDto(RubricImportant rubricImportant) {
         this.id = rubricImportant.getId();
-        this.rubricId = rubricImportant.getRubric().getId();
-        this.rubricName = rubricImportant.getRubric().getName();
+        if (rubricImportant.getRubric() != null) {
+            this.rubricId = rubricImportant.getRubric().getId();
+            this.rubricName = rubricImportant.getRubric().getName();
+        } else {
+            this.rubricId = 0L;
+            this.rubricName = "";
+        }
         this.important = rubricImportant.getImportant();
         this.classroomId = rubricImportant.getClassroomId();
     }
