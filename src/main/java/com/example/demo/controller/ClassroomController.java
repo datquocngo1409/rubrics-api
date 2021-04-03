@@ -381,6 +381,8 @@ public class ClassroomController {
             List<RubricImportant> list = rubricImportantService.findAllByClassroomId(id);
             transcriptInfomation.setRubricImportantList(list);
             transcriptInfomationService.save(transcriptInfomation);
+            rubricImportant.setClassroomId(0L);
+            rubricImportantService.save(rubricImportant);
         }
         return new ResponseEntity<ClassroomDto>(new ClassroomDto(classroom), HttpStatus.OK);
     }
