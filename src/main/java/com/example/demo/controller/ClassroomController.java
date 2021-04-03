@@ -379,6 +379,7 @@ public class ClassroomController {
                 }
             }
             classroomRubricImportantList.removeIf(ri -> ri.getId().equals(rubricImportant.getId()));
+            rubricImportantService.delete(rubricImportant.getId());
         }
         return new ResponseEntity<ClassroomDto>(new ClassroomDto(classroom), HttpStatus.OK);
     }
