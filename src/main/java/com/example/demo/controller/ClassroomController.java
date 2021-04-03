@@ -301,7 +301,7 @@ public class ClassroomController {
                 continue;
             }
             double important = Double.parseDouble(importantIdArray[i]);
-            RubricImportant rubricImportant = rubricImportantService.findByRubricAndImportant(rubric, important);
+            RubricImportant rubricImportant = rubricImportantService.findByRubricAndImportantAndClassroomId(rubric, important, id);
             if (rubricImportant == null) {
                 rubricImportant = new RubricImportant(rubric, Double.parseDouble(importantIdArray[i]), classroom.getId());
                 rubricImportantService.save(rubricImportant);

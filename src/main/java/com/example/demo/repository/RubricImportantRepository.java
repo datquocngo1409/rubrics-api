@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RubricImportantRepository extends JpaRepository<RubricImportant, Long> {
     public RubricImportant findByRubricAndImportant(Rubric rubric, double important);
+    public RubricImportant findByRubricAndImportantAndClassroomId(Rubric rubric, double important, Long classroomId);
 }

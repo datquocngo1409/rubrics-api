@@ -25,6 +25,10 @@ public class RubricImportantService {
         return repository.findByRubricAndImportant(rubric, important);
     }
 
+    public RubricImportant findByRubricAndImportantAndClassroomId(Rubric rubric, double important, Long classroomId) {
+        return repository.findByRubricAndImportantAndClassroomId(rubric, important, classroomId);
+    }
+
     public void create(RubricImportant model) {
         repository.save(model);
     }
