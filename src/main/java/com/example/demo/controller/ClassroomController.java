@@ -266,8 +266,11 @@ public class ClassroomController {
         }
         TranscriptInfomation transcriptInfomation = transcriptInfomationService.findByClassroom(classroom);
         List<RubricImportantDto> rubricImportantDtos = new ArrayList<>();
-        for (RubricImportant ri : transcriptInfomation.getRubricImportantList()) {
-            rubricImportantDtos.add(new RubricImportantDto(ri));
+        List<RubricImportant> list = rubricImportantService.findAll();
+        for (RubricImportant ri : list) {
+            if (ri.getClassroomId().equals(id)) {
+                rubricImportantDtos.add(new RubricImportantDto(ri));
+            }
         }
         if (rubricImportantDtos.size() == 0) {
             return new ResponseEntity<List<RubricImportantDto>>(new ArrayList<>(), HttpStatus.OK);
@@ -349,12 +352,10 @@ public class ClassroomController {
                 rubricImportant = rubricImportantService.findById(Long.parseLong(rubricImportantId));
                 System.out.println(rubricImportant.getRubric().getName());
             } catch (Exception e) {
-                System.out.println("rubricImportantId: " + rubricImportantId);
                 System.out.println(e.getMessage());
                 continue;
             }
             if (!rubricImportant.getClassroomId().equals(id)) {
-                System.out.println("rubircImportantClassId !== id");
                 continue;
             }
             for (StudentTotalRubricPoint strp : studentTotalRubricPoints) {
@@ -367,7 +368,6 @@ public class ClassroomController {
                         } else {
                             newSrp.remove(srp);
                         }
-                        System.out.println("newSrp: " + newSrp);
                         strp.setStudentRubricPoint(newSrp);
                         strp = studentTotalRubricPointService.recalculator(strp);
                         studentTotalRubricPointService.save(strp);
