@@ -65,6 +65,25 @@ public class JwtAuthenController {
         }
     }
 
+    @RequestMapping(value = "/signups", method = RequestMethod.POST)
+    public ResponseEntity<?> saveUsers(@RequestBody List<RequestUser> requestUsers) throws Exception {
+        List<User> userList = userService.findAll();
+        for (RequestUser user : requestUsers) {
+            boolean isExit = false;
+            for (User userFor : userList) {
+                if (userFor.getUsername().equals(user.getUsername())) isExit = true;
+            }
+            if (!isExit) {
+                User userSave = new User(user.getUsername(), user.getPassword(), user.getRole(), user.getName());
+                userService.createUser(userSave);
+                User userByUsername = userService.findByUsername(user.getUsername());
+                userSave.setCode(String.valueOf((10000000 + userByUsername.getId())));
+                userDetailsService.save(user);
+            }
+        }
+        return ResponseEntity.ok(null);
+    }
+
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
